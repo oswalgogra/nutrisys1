@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Mata - Consultorio Médico</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<script>
+    function enviarSolicitud() {
+        // Obtener los valores ingresados por el usuario
+        var nombre = document.getElementById("nombre").value;
+        var email = document.getElementById("email").value;
+        var especialidad = document.getElementById("especialidad").value;
+        var fecha = document.getElementById("fecha").value;
+        var mensaje = document.getElementById("mensaje").value;
+        
+        // Validar que los campos no estén vacíos
+       /* if (nombre === "" || email === "" || especialidad === "" || fecha === "" || mensaje === "") {
+            alert("Por favor completa todos los campos.");
+            return;
+        }*/
+        
+        // Crear un objeto con los datos de la solicitud
+        var solicitud = {
+            nombre: nombre,
+            email: email,
+            especialidad: especialidad,
+            fecha: fecha,
+            mensaje: mensaje
+        };
+
+        //var solicitud = new FormData(document.getElementById("frmSchedule"));
+        
+        // Aquí puedes enviar la solicitud a un servidor o hacer cualquier otra acción
+        const url = '/save-schedule';
+        const opciones = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' }, 
+            body: solicitud
+        };
+        fetch(url, opciones)
+            .then(function(response){
+                console.log(response);
+                console.log("terminó");
+            })
+            .catch(err => console.log(err))
+
+        alert("Solicitud enviada correctamente");
+        
+        // Limpiar el formulario
+       /* document.getElementById("nombre").value = "";
+        document.getElementById("email").value = "";
+        document.getElementById("especialidad").value = "";
+        document.getElementById("fecha").value = "";
+        document.getElementById("mensaje").value = "";*/
+    }
+</script>
+
+<body>
+    <div class="header">
+        <h1>Consultorio Médico</h1>
+    </div>
+<h1>Agendamiento de Citas</h1>
+<form name="frmSchedule" id="frmSchedule">
+    <label for="nombre">Nombre:</label>
+    <input type="text" id="nombre" required><br><br>
+    
+    <label for="email">Email:</label>
+    <input type="email" id="email" required><br><br>
+
+    <label for="especialidad">Especialidad:</label>
+    <select id="especialidad" required>
+        <option value="">Seleccione</option>
+        <option value="nutricion">Nutrición</option>
+        <option value="medicinagral">Medicina general</option>
+        <option value="fisioterapia">Fisioterapia</option>
+        <option value="psicologia">Psicología</option>
+    </select> <br><br>
+    
+    <label for="fecha">Fecha de cita:</label>
+    <input type="date" id="fecha" required><br><br>
+    
+    <label for="mensaje">Mensaje:</label><br>
+    <textarea id="mensaje" rows="4" cols="50" required></textarea><br><br>
+    
+    <button type="button" onclick="enviarSolicitud()">Enviar Solicitud</button>
+</form>
+
+
+<section class="book_section layout_padding">
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <form>
+            <h4>
+              BOOK <span>APPOINTMENT</span>
+            </h4>
+            <div class="form-row ">
+              <div class="form-group col-lg-4">
+                <label for="inputPatientName">Patient Name </label>
+                <input type="text" class="form-control" id="inputPatientName" placeholder="">
+              </div>
+              <div class="form-group col-lg-4">
+                <label for="inputDoctorName">Doctor's Name</label>
+                <select name="" class="form-control wide" id="inputDoctorName">
+                  <option value="Normal distribution ">Normal distribution </option>
+                  <option value="Normal distribution ">Normal distribution </option>
+                  <option value="Normal distribution ">Normal distribution </option>
+                </select>
+              </div>
+              <div class="form-group col-lg-4">
+                <label for="inputDepartmentName">Department's Name</label>
+                <select name="" class="form-control wide" id="inputDepartmentName">
+                  <option value="Normal distribution ">Normal distribution </option>
+                  <option value="Normal distribution ">Normal distribution </option>
+                  <option value="Normal distribution ">Normal distribution </option>
+                </select>
+              </div>
+            </div>
+            <div class="form-row ">
+              <div class="form-group col-lg-4">
+                <label for="inputPhone">Phone Number</label>
+                <input type="number" class="form-control" id="inputPhone" placeholder="XXXXXXXXXX">
+              </div>
+              <div class="form-group col-lg-4">
+                <label for="inputSymptoms">Symptoms</label>
+                <input type="text" class="form-control" id="inputSymptoms" placeholder="">
+              </div>
+              <div class="form-group col-lg-4">
+                <label for="inputDate">Choose Date </label>
+                <div class="input-group date" id="inputDate" data-date-format="mm-dd-yyyy">
+                  <input type="text" class="form-control" readonly>
+                  <span class="input-group-addon date_icon">
+                    <i class="fa fa-calendar" aria-hidden="true"></i>
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="btn-box">
+              <button type="submit" class="btn ">Submit Now</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>

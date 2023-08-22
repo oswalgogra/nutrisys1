@@ -1,0 +1,35 @@
+{% extends 'layout.html' %}
+{% block content %}
+<section class="about_section">
+    <div class="container  ">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="detail-box">
+            <div class="heading_container">
+              <h2>
+                Citas <span>Agendadas</span>
+              </h2>
+            </div>
+            {% if session['user'] %}
+            <p>
+                Las citas que se encuentran programadas son:
+                <ul>
+                    {% for reg in schedules: %}
+                        <li>
+                            Paciente: {{ reg['nombre'] }} <br/>
+                            Especialidad: {{ reg['especialidad'] }} <br/>
+                            Fecha: {{ reg['fecha'] }} <br/>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </p>
+            {% else %}
+            <p>Debes iniciar sesión para poder visualizar la agenda.</p>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+</section>
+{% endblock %}
+

@@ -1,0 +1,114 @@
+{% extends 'layout.html' %}
+{% block content %}
+<script>
+    function enviarSolicitud() {
+        // Obtener los valores ingresados por el usuario
+        var nombre = document.getElementById("nombre").value;
+        var email = document.getElementById("email").value;
+        var telefono = document.getElementById("telefono").value;
+        var especialidad = document.getElementById("especialidad").value;
+        var fecha = document.getElementById("fecha").value;
+        var sintomas = document.getElementById("sintomas").value;
+        
+        // Validar que los campos no estén vacíos
+        if (nombre === "" || email === "" || telefono === "" || especialidad === "" || fecha === "" || sintomas === "") {
+            alert("Por favor completa todos los campos.");
+            return;
+        }
+        
+        // Crear un objeto con los datos de la solicitud
+        let solicitud = new FormData();
+        solicitud.append("nombre", nombre);
+        solicitud.append("email", email);
+        solicitud.append("telefono", telefono);
+        solicitud.append("especialidad", especialidad);
+        solicitud.append("fecha", fecha);
+        solicitud.append("sintomas", sintomas);
+        
+        // Aquí puedes enviar la solicitud a un servidor o hacer cualquier otra acción
+        const url = '/save-schedule';
+        const opciones = {
+            method: 'POST',
+            body: solicitud
+        };
+
+        fetch(url, opciones)
+            .then(function(response){
+                console.log(response);
+                alert(response);
+                limpiarForm();
+            })
+            .catch(function(err){
+              console.log(err); 
+              alert(err);
+            });
+        
+    }
+
+    function limpiarForm(){
+        document.getElementById("nombre").value = "";
+        document.getElementById("email").value = "";
+        document.getElementById("telefono").value = "";
+        document.getElementById("especialidad").value = "";
+        document.getElementById("fecha").value = "";
+        document.getElementById("sintomas").value = "";
+    }
+</script>
+<section class="book_section layout_padding">
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <form>
+            <h4>
+              Agendamiento de <span>cita</span>
+            </h4>
+            <div class="form-row ">
+              <div class="form-group col-lg-4">
+                <label for="nombre">Patient Name </label>
+                <input type="text" class="form-control" id="nombre" name="nombre" placeholder="">
+              </div>
+              <div class="form-group col-lg-4">
+                <label for="especialidad">Type of service</label>
+                <select name="especialidad" class="form-control wide" id="especialidad">
+                    <option value="">Seleccione</option>
+                    <option value="nutricion">Nutrición</option>
+                    <option value="medicinagral">Medicina general</option>
+                    <option value="fisioterapia">Fisioterapia</option>
+                    <option value="psicologia">Psicología</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-row ">
+              <div class="form-group col-lg-4">
+                <label for="telefono">Phone Number</label>
+                <input type="number" class="form-control" id="telefono" placeholder="XXXXXXXXXX">
+              </div>
+              <div class="form-group col-lg-4">
+                <label for="email">Email</label>
+                <input type="email" class="form-control" id="email" placeholder="XXXXX@XXXXX.XXX">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-lg-4">
+                <label for="sintomas">Symptoms</label>
+                <textarea class="form-control" id="sintomas" name="sintomas" rows="4" cols="50" required></textarea>
+              </div>
+              <div class="form-group col-lg-4">
+                <label for="fecha">Choose Date </label>
+                <div class="input-group date" >
+                  <input type="text" class="form-control" id="fecha" name="fecha" data-date-format="mm-dd-yyyy" placeholder="mm-dd-yyyy">
+                  <span class="input-group-addon date_icon">
+                    <i class="fa fa-calendar" aria-hidden="true"></i>
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="btn-box">
+              <button type="button" class="btn " onclick="enviarSolicitud()">Submit Now</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+</section>
+{% endblock content %}
