@@ -1,34 +1,50 @@
 from flask import render_template, session
+from app import mysql
 
-def index_page():
-    return render_template('index.html')
+class Control():
 
-def services_page():
-    return render_template('services.html')
+    def __init__(self, nombre=''):
+        self.nombre = nombre
 
-def contact_page():
-    return render_template('contact.html')
+    def index_page(self):
+        return render_template('index.html')
 
-def schedule_page():
-    return render_template('schedule.html')
+    def services_page(self):
+        return render_template('services.html')
 
-def save_schedule():
-    return 'Schedule created successfully!'
+    def contact_page(self):
+        return render_template('contact.html')
 
-def schedules_page(citas):
-    if 'user' not in session.keys():
-        session['citas'] = ()
-    return render_template('schedules_list.html', schedules=citas)
+    def schedule_page(self):
+        return render_template('schedule.html')
 
-def cargar_citas():
-    session['citas'] = [
-        {'nombre': 'Oswaldo', 'fecha': '24-08-2023', 'especialidad': 'Nutrición'},
-        {'nombre': 'Adriana', 'fecha': '24-08-2023', 'especialidad': 'Nutrición'},
-        {'nombre': 'Luz', 'fecha': '25-08-2023', 'especialidad': 'Fisioterapia'},
-        {'nombre': 'Cesar', 'fecha': '26-08-2023', 'especialidad': 'Medicina general'}]
+    def insert_schedule(self, cita):
+        cursor = mysql.connection.cursor()
+        try:
+            query = f"INSERT INTOD citax (paciente, especialidad, fecha, email, telefono, sintomas) VALUES ('{cita['nombre']}','{cita['especialidad']}','{cita['fecha']}','{cita['email']}','{cita['telefono']}','{cita['sintomas']}')"
+            cursor.execute(query)
+            mysql.connection.commit()
+            cursor.close()
+        except Exception:
+            print(f"Error al ejecutar la sentencia: {query}")
+            return False
+        return True
 
-def get_citas():
-    cur = mysql.connection.cursor()
-    cur.execute("""SELECT * FROM cita""")
-    rv = cur.fetchall()
-    return str(rv)
+    def schedules_page(self):
+        citas = self.get_citas()
+        for c in citas:
+            print(c)
+        return render_template('schedules_list.html', schedules=citas)
+
+    def cargar_citas(self):
+        session['citas'] = [
+            {'nombre': 'Oswaldo', 'fecha': '24-08-2023', 'especialidad': 'Nutrición'},
+            {'nombre': 'Adriana', 'fecha': '24-08-2023', 'especialidad': 'Nutrición'},
+            {'nombre': 'Luz', 'fecha': '25-08-2023', 'especialidad': 'Fisioterapia'},
+            {'nombre': 'Cesar', 'fecha': '26-08-2023', 'especialidad': 'Medicina general'}]
+
+    def get_citas(self):
+        cur = mysql.connection.cursor()
+        cur.execute("SELECT * FROM cita")
+        rv = cur.fetchall()
+        return rv
